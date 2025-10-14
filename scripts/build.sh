@@ -15,12 +15,11 @@ gcc -m32 -ffreestanding -I src/include -c src/kernel/idt.c -o build/idt_kernel.o
 gcc -m32 -ffreestanding -I src/include -c src/kernel/pic.c -o build/pic.o
 
 # Link
-
-# Update link command
 ld -m elf_i386 -T config/linker.ld \
     build/boot.o build/idt.o \
     build/kernel.o build/idt_kernel.o build/pic.o \
     -o build/kernel.bin
+
 # Create ISO
 mkdir -p iso/boot/grub
 cp build/kernel.bin iso/boot/

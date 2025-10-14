@@ -34,5 +34,7 @@ void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, uns
 
 void pic_init(void);
 void pic_ack(unsigned int irq);
+void outb(unsigned short port, unsigned char val);
+unsigned char inb(unsigned short port);
 
 #endif
