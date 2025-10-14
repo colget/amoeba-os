@@ -1,13 +1,28 @@
 #!/bin/bash
-# Compile assembly
+set -e  # Exit on error
+
+# Clean build directory
+rm -rf build/*
+mkdir -p build
+
+# Assemble boot code
 nasm -f elf32 src/boot/boot.s -o build/boot.o
-# Compile C
-gcc -m32 -ffreestanding -c src/kernel/kernel.c -o build/kernel.o
+nasm -f elf32 src/boot/idt.s -o build/idt.o
+
+# Compile kernel
+gcc -m32 -ffreestanding -I src/include -c src/kernel/kernel.c -o build/kernel.o
+gcc -m32 -ffreestanding -I src/include -c src/kernel/idt.c -o build/idt_kernel.o
+
 # Link
-ld -m elf_i386 -T config/linker.ld -o build/kernel.bin build/boot.o build/kernel.o
-# Prepare ISO structure
+ld -m elf_i386 -T config/linker.ld \
+    build/boot.o build/idt.o \
+    build/kernel.o build/idt_kernel.o \
+    -o build/kernel.bin
+
+# Create ISO
 mkdir -p iso/boot/grub
 cp build/kernel.bin iso/boot/
 cp config/grub/grub.cfg iso/boot/grub/
-# Create ISO
 grub-mkrescue -o dist/amoeba.iso iso
+
+echo "Build complete: dist/amoeba.iso"
