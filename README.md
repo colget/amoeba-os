@@ -12,3 +12,4 @@ A minimal operating system project, starting with a bootable kernel that prints 
 - `scripts/`: Build scripts.
 - `build/`: Generated object files and binaries (ignored).
 - `dist/`: Bootable ISO (ignored).
+Amoeba 0.2: Fixed Multiboot header, added backspace, and resolved screen overwrite
