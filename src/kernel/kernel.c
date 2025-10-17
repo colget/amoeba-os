@@ -1,3 +1,6 @@
+#include "interrupts.h"
+#include "shell.h"
+
 void putchar(char c, int x, int y, char color) {
     unsigned short* vga = (unsigned short*)0xB8000;
     vga[y * 80 + x] = (unsigned short)c | ((unsigned short)color << 8);
@@ -22,15 +25,26 @@ void print_string(const char* str, int start_x, int start_y, char color) {
     }
 }
 
-void kernel_main() {
-    // Clear screen (fill with spaces, black bg/white fg)
+unsigned int system_ticks = 0;
+
+void kernel_main(void) {
+    // Clear screen
     for (int i = 0; i < 80 * 25; i++) {
-        putchar(' ', i % 80, i / 80, 0x0F);  // 0x0F = white on black
+        putchar(' ', i % 80, i / 80, 0x0F);
     }
 
-    // Print your message at row 10, column 10, green text (0x0A)
-    print_string("Hi there, I am CyberMorph's First OS - Amoeba 0.1", 10, 10, 0x0A);
-    
-    // Infinite loop (kernel doesn't exit)
-    while (1) {}
+    // Initialize interrupts
+    init_idt();
+    pic_init();
+
+    // Initialize shell
+    init_shell();
+
+    // Enable interrupts
+    __asm__ volatile ("sti");
+
+    while (1) {
+        system_ticks++; // Increment ticks
+        __asm__ volatile ("hlt");
+    }
 }

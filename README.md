@@ -16,3 +16,4 @@ Amoeba 0.2: Fixed Multiboot header, added backspace, and resolved screen overwri
 Amoeba 0.2: Fixed Multiboot, backspace, and screen overwrite
 Amoeba 0.2.1: Added simple shell with commands: clear, help, version, echo <text>
 Amoeba 0.2.1: Added simple shell with commands: clear, help, version, echo <text>
+Amoeba 0.2.2: Moved welcome message to top-left, added halt and info commands, improved echo handling
