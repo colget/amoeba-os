@@ -14,3 +14,5 @@ A minimal operating system project, starting with a bootable kernel that prints 
 - `dist/`: Bootable ISO (ignored).
 Amoeba 0.2: Fixed Multiboot header, added backspace, and resolved screen overwrite
 Amoeba 0.2: Fixed Multiboot, backspace, and screen overwrite
+Amoeba 0.2.1: Added simple shell with commands: clear, help, version, echo <text>
+Amoeba 0.2.1: Added simple shell with commands: clear, help, version, echo <text>
