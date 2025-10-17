@@ -1,5 +1,5 @@
 # Amoeba OS
-A minimal operating system project, starting with a bootable kernel that prints "Hi there, I am CyberMorph's First OS - Amoeba 0.1".
+An ongoing and evolving Operating System project. 
 
 ## Build Instructions
 1. Install NASM, GCC, Binutils, GRUB tools, and QEMU.
