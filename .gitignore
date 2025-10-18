@@ -5,3 +5,4 @@ iso/
 *.bin
 *.iso
 *.log
+scripts/build.sh.bak
