@@ -17,3 +17,4 @@ Amoeba 0.2: Fixed Multiboot, backspace, and screen overwrite
 Amoeba 0.2.1: Added simple shell with commands: clear, help, version, echo <text>
 Amoeba 0.2.1: Added simple shell with commands: clear, help, version, echo <text>
 Amoeba 0.2.2: Moved welcome message to top-left, added halt and info commands, improved echo handling
+Amoeba 0.2.3: Added Shift key support for uppercase letters and symbols, case-insensitive commands

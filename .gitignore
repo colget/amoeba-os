@@ -1,4 +1,7 @@
-# Ignore build artifacts
 build/
 dist/
-iso/boot/kernel.bin
+iso/
+*.o
+*.bin
+*.iso
+*.log

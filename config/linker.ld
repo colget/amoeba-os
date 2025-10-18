@@ -1,23 +1,49 @@
 ENTRY(_start)
 
-SECTIONS {
-    . = 0x00100000;  /* Kernel load address */
+PHDRS
+{
+    multiboot PT_LOAD FLAGS(5); /* Read + Execute */
+    text PT_LOAD FLAGS(5);      /* Read + Execute */
+    data PT_LOAD FLAGS(6);      /* Read + Write */
+}
 
-    .text : ALIGN(0x1000) {
+SECTIONS
+{
+    . = 0x100000; /* Kernel load address */
+
+    .multiboot : {
         *(.multiboot)
+    } :multiboot
+
+    .text : {
         *(.text)
-    }
+        *(.text.*)
+    } :text
 
-    .rodata : ALIGN(0x1000) {
-        *(.rodata*)
-    }
+    .rodata : {
+        *(.rodata)
+        *(.rodata.*)
+    } :text
 
-    .data : ALIGN(0x1000) {
+    .data : {
         *(.data)
-    }
+    } :data
 
-    .bss : ALIGN(0x1000) {
-        *(COMMON)
+    .bss : {
         *(.bss)
+    } :data
+
+    . = 0x20000;
+    __stack_top = .;
+
+    /DISCARD/ : {
+        *(.comment)
+        *(.eh_frame)
+        *(.note.GNU-stack)
+        *(.iplt)
+        *(.rel.dyn)
+        *(.got)
+        *(.got.plt)
+        *(.igot.plt)
     }
 }
