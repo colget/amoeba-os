@@ -1,29 +1,46 @@
+[bits 32]
+
 ; Multiboot header constants
-MBALIGN     equ  1<<0
-MEMINFO     equ  1<<1
-FLAGS       equ  MBALIGN | MEMINFO
-MAGIC       equ  0x1BADB002
-CHECKSUM    equ -(MAGIC + FLAGS)
+MULTIBOOT_HEADER_MAGIC  equ 0x1BADB002
+MULTIBOOT_HEADER_FLAGS  equ 0x0
+MULTIBOOT_CHECKSUM      equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
+
+extern kernel_main
+global _start
 
 section .multiboot
 align 4
-    dd MAGIC
-    dd FLAGS
-    dd CHECKSUM
-
-section .bss
-align 16
-stack_bottom:
-    resb 16384  ; 16KB stack
-stack_top:
+    dd MULTIBOOT_HEADER_MAGIC
+    dd MULTIBOOT_HEADER_FLAGS
+    dd MULTIBOOT_CHECKSUM
 
 section .text
-global _start
 _start:
-    mov esp, stack_top  ; Set up stack
-    extern kernel_main
-    call kernel_main    ; Call C kernel
-    cli                 ; Disable interrupts
-.hang:
-    hlt                 ; Halt CPU
-    jmp .hang
+    ; Set up stack
+    mov esp, 0x20000
+    mov ebp, esp
+
+    ; Set segment registers
+    mov ax, 0x18
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
+    ; Hide BIOS cursor
+    mov dx, 0x3D4
+    mov al, 0x0A
+    out dx, al
+    inc dx
+    mov al, 0x20
+    out dx, al
+
+    ; Call kernel
+    call kernel_main
+
+    ; Halt
+    cli
+    hlt
+
+section .note.GNU-stack
