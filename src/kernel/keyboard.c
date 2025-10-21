@@ -1,3 +1,4 @@
+#include "io.h"
 #include <interrupts.h>
 #include <shell.h>
 

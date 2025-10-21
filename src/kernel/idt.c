@@ -36,6 +36,7 @@ extern void isr28(void);
 extern void isr29(void);
 extern void isr30(void);
 extern void isr31(void);
+extern void isr32(void); /* new */
 extern void isr33(void);
 
 void init_idt(void) {
@@ -80,6 +81,7 @@ void init_idt(void) {
     idt_set_gate(29, (unsigned long)isr29, 0x10, IDT_FLAG_FLAGS);
     idt_set_gate(30, (unsigned long)isr30, 0x10, IDT_FLAG_FLAGS);
     idt_set_gate(31, (unsigned long)isr31, 0x10, IDT_FLAG_FLAGS);
+    idt_set_gate(32, (unsigned long)isr32, 0x10, IDT_FLAG_FLAGS); /* new */
     idt_set_gate(33, (unsigned long)isr33, 0x10, IDT_FLAG_FLAGS);
 
     idt_load(&idtp);

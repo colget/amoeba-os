@@ -53,6 +53,15 @@ ISR_NOERRCODE 29
 ISR_NOERRCODE 30
 ISR_NOERRCODE 31
 
+; Timer interrupt (32)
+global isr32
+isr32:
+    cli
+    push 0
+    push 32
+    jmp pit_stub
+
+
 ; Keyboard interrupt (33)
 global isr33
 isr33:
@@ -91,6 +100,32 @@ exception_stub:
     add esp, 8          ; Clean interrupt number and error code
     sti
     iret
+
+pit_stub:
+    pusha
+    push ds
+    push es
+    push fs
+    push gs
+
+    mov ax, 0x18
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+
+    extern interrupt_handler_32
+    call interrupt_handler_32
+
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    popa
+    add esp, 8
+    sti
+    iret
+
 
 ; Keyboard stub
 keyboard_stub:

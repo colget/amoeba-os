@@ -1,7 +1,14 @@
+#include "io.h"
 #include <shell.h>
 #include <interrupts.h>
 
 extern unsigned int system_ticks;
+/* Forward declarations for cursor control */
+/*extern unsigned short cursor_x;
+/*extern unsigned short cursor_y;
+
+/* Track cursor visibility for blinking */
+static int cursor_visible = 0;
 
 static char input_buf[256];
 static int input_pos = 0;
@@ -38,7 +45,7 @@ static void print_prompt(void) {
 }
 
 void init_shell(void) {
-    print_string("Hi there, I am CyberMorph's First OS - Amoeba 0.2.3", 0, 0, 0x0A);
+    print_string("Hi there, I am CyberMorph's First OS - Amoeba 0.3.0", 0, 0, 0x0A);
     cursor_y = 2;
     print_prompt();
 }
@@ -169,3 +176,23 @@ void shell_handle_input(char c) {
         update_cursor();
     }
 }
+void toggle_cursor(void) {
+    volatile unsigned char *video = (volatile unsigned char *)0xB8000;
+    unsigned int pos = (cursor_y * 80 + cursor_x) * 2;
+
+    /* Read current character */
+    unsigned char current_char = video[pos];
+
+    if (cursor_visible) {
+        /* Restore a blank space when cursor is "off" */
+        video[pos] = ' ';
+    } else {
+        /* Draw an underscore when cursor is "on" */
+        video[pos] = '_';
+    }
+
+    cursor_visible = !cursor_visible;
+}
+
+
+
